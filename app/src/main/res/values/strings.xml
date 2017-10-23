@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Ekiki Yen</string>
+    <string name="refresh">Refresh</string>
+    <string name="about">About</string>
 </resources>

@@ -17,6 +17,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/AppTheme.CardNumber"
             android:text="@{ekikimeItem.cardNumber}"
             android:paddingBottom="@dimen/margin_16"/>
 
