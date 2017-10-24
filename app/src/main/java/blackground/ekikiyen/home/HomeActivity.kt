@@ -18,9 +18,12 @@ import android.widget.LinearLayout
 import blackground.ekikiyen.R
 import blackground.ekikiyen.about.view.AboutActivity
 import blackground.ekikiyen.adapters.EkikimeAdapter
+import blackground.ekikiyen.data.Ekikime
 import blackground.ekikiyen.databinding.ViewDialerBinding
 
 class HomeActivity : AppCompatActivity() {
+
+    private lateinit var adapter: EkikimeAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +36,7 @@ class HomeActivity : AppCompatActivity() {
                 .get(HomeViewModel::class.java)
 
         val ekikimeList = findViewById<RecyclerView>(R.id.list)
-        val adapter = EkikimeAdapter(onCardClick = object : EkikimeAdapter.IOnCardClick {
+        adapter = EkikimeAdapter(onCardClick = object : EkikimeAdapter.IOnCardClick {
             override fun onClick(cardNumber: String) {
                 ekikime(cardNumber)
             }
@@ -41,7 +44,7 @@ class HomeActivity : AppCompatActivity() {
         ekikimeList.adapter = adapter
 
         viewModel.ekikimeList
-                .observe(this, Observer { adapter.update(it) })
+                .observe(this, Observer { updateList(it) })
 
         viewModel.dialNumber
                 .observe(this, Observer { loadCard(it) })
@@ -54,6 +57,28 @@ class HomeActivity : AppCompatActivity() {
 
         // now let the view model fetch the items
         viewModel.getAll()
+    }
+
+    private fun updateList(list: ArrayList<Ekikime>?) {
+        if (list == null) return
+
+        if (list.isEmpty()) {
+            showEmpty()
+        } else {
+            hideEmpty()
+        }
+
+        adapter.update(list)
+    }
+
+    private fun showEmpty() {
+        findViewById<LinearLayout>(R.id.empty)
+                .visibility = View.VISIBLE
+    }
+
+    private fun hideEmpty() {
+        findViewById<LinearLayout>(R.id.empty)
+                .visibility = View.GONE
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
