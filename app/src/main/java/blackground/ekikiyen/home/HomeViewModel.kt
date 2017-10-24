@@ -21,6 +21,8 @@ import retrofit2.http.PUT
 class HomeViewModel : ViewModel() {
 
     val ekikimeList = MutableLiveData<ArrayList<Ekikime>>()
+    val showLoading = SingleLiveEvent<Void>()
+    val hideLoading = SingleLiveEvent<Void>()
 
     // contains the recharge code to be dialed
     val dialNumber = SingleLiveEvent<String>()
@@ -31,6 +33,8 @@ class HomeViewModel : ViewModel() {
     private val numberArr = ArrayList<String>()
 
     fun getAll() {
+        showLoading.call()
+
         getRetrofit()
                 .create(Endpoint::class.java)
                 .getAll()
@@ -38,31 +42,34 @@ class HomeViewModel : ViewModel() {
                     override fun onResponse(call: Call<ArrayList<Ekikime>>?,
                                             response: Response<ArrayList<Ekikime>>) {
                         ekikimeList.value = response.body()
+                        hideLoading.call()
                     }
 
                     override fun onFailure(call: Call<ArrayList<Ekikime>>?, t: Throwable?) {
-
+                        hideLoading.call()
                     }
 
                 })
     }
 
     fun submit(cardNumber: String) {
-
         val form = mapOf(
                 "card_number" to cardNumber
         )
 
+        showLoading.call()
+
         getRetrofit()
                 .create(Endpoint::class.java)
                 .submit(form)
-                .enqueue(object: Callback<Void> {
+                .enqueue(object : Callback<Void> {
                     override fun onResponse(call: Call<Void>?, response: Response<Void>?) {
                         // todo notify the user
+                        hideLoading.call()
                     }
 
                     override fun onFailure(call: Call<Void>?, t: Throwable?) {
-                        TODO("not implemented")
+                        hideLoading.call()
                     }
 
                 })
@@ -70,19 +77,21 @@ class HomeViewModel : ViewModel() {
     }
 
     fun use(cardNumber: String) {
-
         val form = mapOf("card_number" to cardNumber)
+
+        showLoading.call()
 
         getRetrofit()
                 .create(Endpoint::class.java)
                 .use(form)
-                .enqueue(object: Callback<Void> {
+                .enqueue(object : Callback<Void> {
                     override fun onFailure(call: Call<Void>?, t: Throwable?) {
-                        TODO("not implemented")
+                        // todo notify
+                        hideLoading.call()
                     }
 
                     override fun onResponse(call: Call<Void>?, response: Response<Void>?) {
-                        TODO("not implemented")
+                        hideLoading.call()
                     }
 
                 })
@@ -100,7 +109,7 @@ class HomeViewModel : ViewModel() {
     // VIEW METHODS
     fun delete() {
         if (!numberArr.isEmpty()) {
-            numberArr.removeAt(numberArr.size -1)
+            numberArr.removeAt(numberArr.size - 1)
             updateCardNumber()
         }
     }

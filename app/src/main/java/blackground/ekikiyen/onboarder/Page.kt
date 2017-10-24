@@ -1,5 +1,7 @@
 package blackground.ekikiyen.onboarder
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -9,6 +11,8 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import blackground.ekikiyen.R
+import blackground.ekikiyen.home.HomeActivity
+import blackground.ekikiyen.splash.Splash
 import java.io.Serializable
 
 class Page : Fragment() {
@@ -54,7 +58,13 @@ class Page : Fragment() {
     }
 
     private fun finish() {
+        activity.getSharedPreferences(Splash.introPrefs, Context.MODE_PRIVATE)
+                .edit()
+                .putBoolean(Splash.onboardShownKey, true)
+                .apply()
 
+        activity.startActivity(Intent(activity, HomeActivity::class.java))
+        activity.finish()
     }
 
 

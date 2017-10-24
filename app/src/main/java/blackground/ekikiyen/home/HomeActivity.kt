@@ -13,6 +13,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.LinearLayout
 import blackground.ekikiyen.R
 import blackground.ekikiyen.adapters.EkikimeAdapter
 import blackground.ekikiyen.databinding.ViewDialerBinding
@@ -43,6 +45,12 @@ class HomeActivity : AppCompatActivity() {
         viewModel.dialNumber
                 .observe(this, Observer { loadCard(it) })
 
+        viewModel.hideLoading
+                .observe(this, Observer { hideLoading() })
+
+        viewModel.showLoading
+                .observe(this, Observer { showLoading() })
+
         // now let the view model fetch the items
         viewModel.getAll()
     }
@@ -59,6 +67,14 @@ class HomeActivity : AppCompatActivity() {
             R.id.about -> goToAbout()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun showLoading() {
+        findViewById<LinearLayout>(R.id.loading).visibility = View.VISIBLE
+    }
+
+    private fun hideLoading() {
+        findViewById<LinearLayout>(R.id.loading).visibility = View.GONE
     }
 
     private fun loadCard(card: String?) {
