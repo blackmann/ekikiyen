@@ -10,12 +10,14 @@ import blackground.ekikiyen.databinding.ViewEkikimeItemBinding
 import com.amulyakhare.textdrawable.TextDrawable
 import com.amulyakhare.textdrawable.util.ColorGenerator
 
-class EkikimeAdapter(private val items: ArrayList<Ekikime> = ArrayList()) : RecyclerView.Adapter<EkikimeAdapter.ViewHolder>() {
+class EkikimeAdapter(private val items: ArrayList<Ekikime> = ArrayList(),
+                     private val onCardClick: IOnCardClick) : RecyclerView.Adapter<EkikimeAdapter.ViewHolder>() {
     override fun getItemCount(): Int = items.size
 
-    override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentItem = items[position]
-        holder?.bind(currentItem)
+        holder.bind(currentItem)
+        holder.itemView.setOnClickListener { onCardClick.onClick(currentItem.cardNumber) }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -50,5 +52,9 @@ class EkikimeAdapter(private val items: ArrayList<Ekikime> = ArrayList()) : Recy
 
             binding.usageRemaining.setImageDrawable(textDrawable)
         }
+    }
+
+    interface IOnCardClick {
+        fun onClick(cardNumber: String)
     }
 }

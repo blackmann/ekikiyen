@@ -30,7 +30,11 @@ class HomeActivity : AppCompatActivity() {
                 .get(HomeViewModel::class.java)
 
         val ekikimeList = findViewById<RecyclerView>(R.id.list)
-        val adapter = EkikimeAdapter()
+        val adapter = EkikimeAdapter(onCardClick = object : EkikimeAdapter.IOnCardClick {
+            override fun onClick(cardNumber: String) {
+                ekikime(cardNumber)
+            }
+        })
         ekikimeList.adapter = adapter
 
         viewModel.ekikimeList
@@ -62,7 +66,7 @@ class HomeActivity : AppCompatActivity() {
             return
         }
 
-        val dialIntent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:$card"))
+        val dialIntent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:*134*$card%23"))
         startActivity(dialIntent)
     }
 
@@ -72,6 +76,11 @@ class HomeActivity : AppCompatActivity() {
 
     private fun goToAbout() {
 
+    }
+
+    private fun ekikime(card: String) {
+        val dialIntent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:*135*$card%23"))
+        startActivity(dialIntent)
     }
 
     private fun showDialer() {

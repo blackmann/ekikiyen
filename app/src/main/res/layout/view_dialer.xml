@@ -210,6 +210,7 @@
                 android:contentDescription="@string/image"
                 android:src="@drawable/ic_publish"
                 android:textSize="12sp"
+                android:onClick="@{() -> viewModel.publish()}"
                 app:layout_constraintEnd_toStartOf="@+id/textView11"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"

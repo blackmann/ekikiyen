@@ -58,7 +58,7 @@ class HomeViewModel : ViewModel() {
                 .submit(form)
                 .enqueue(object: Callback<Void> {
                     override fun onResponse(call: Call<Void>?, response: Response<Void>?) {
-                        TODO("not implemented")
+                        // todo notify the user
                     }
 
                     override fun onFailure(call: Call<Void>?, t: Throwable?) {
@@ -113,8 +113,7 @@ class HomeViewModel : ViewModel() {
 
 
     fun dial() {
-        // %23 represents hash #
-        dialNumber.value = "*134*${cardNumber.get()}%23"
+        dialNumber.value = cardNumber.get()
     }
 
     fun publish() {
