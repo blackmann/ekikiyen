@@ -16,5 +16,8 @@
     <string name="kicking_is_caring">Ki\'king is caring…</string>
     <string name="from_blackground">from Blackground</string>
     <string name="finish">finish</string>
-    <string name="updating">Updating...</string>
+    <string name="updating">Updating…</string>
+    <string name="app_intro">Recycling Ekiki me codes from Vodafone</string>
+    <string name="version">ALPHA-17.10.25</string>
+    <string name="developers_info">Blackground Labs\nyarteydegreat2@gmail.com\n+233 20589 4019</string>
 </resources>

@@ -2,10 +2,7 @@ package blackground.ekikiyen.home
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import android.content.Intent
 import android.databinding.ObservableField
-import android.net.Uri
-import android.util.Log
 import blackground.ekikiyen.data.Ekikime
 import blackground.pidgin.arch.SingleLiveEvent
 import retrofit2.Call

@@ -16,6 +16,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
 import blackground.ekikiyen.R
+import blackground.ekikiyen.about.view.AboutActivity
 import blackground.ekikiyen.adapters.EkikimeAdapter
 import blackground.ekikiyen.databinding.ViewDialerBinding
 
@@ -87,11 +88,13 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun refresh() {
-
+        ViewModelProviders.of(this)
+                .get(HomeViewModel::class.java)
+                .getAll()
     }
 
     private fun goToAbout() {
-
+        startActivity(Intent(this, AboutActivity::class.java))
     }
 
     private fun ekikime(card: String) {
