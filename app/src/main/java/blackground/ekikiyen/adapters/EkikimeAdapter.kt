@@ -43,7 +43,7 @@ class EkikimeAdapter(private val items: ArrayList<Ekikime> = ArrayList(),
             binding.ekikimeItem = ekikime
             binding.timeAgo.setText("5 minutes ago")
 
-            val usageRemaining = 3 - ekikime.usage
+            val usageRemaining = 2 - ekikime.usage
 
             // create drawable for times remaining
             val colorGenerator = ColorGenerator.MATERIAL
