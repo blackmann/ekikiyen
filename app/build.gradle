@@ -38,4 +38,6 @@ dependencies {
     implementation 'com.android.support:design:26.1.0'
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+    compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
 }
