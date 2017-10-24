@@ -66,6 +66,9 @@ class HomeViewModel : ViewModel() {
                     override fun onResponse(call: Call<Void>?, response: Response<Void>?) {
                         // todo notify the user
                         hideLoading.call()
+
+                        // refresh list to show new
+                        getAll()
                     }
 
                     override fun onFailure(call: Call<Void>?, t: Throwable?) {
