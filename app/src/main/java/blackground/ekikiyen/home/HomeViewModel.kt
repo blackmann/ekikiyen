@@ -2,6 +2,8 @@ package blackground.ekikiyen.home
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import android.databinding.ObservableField
+import android.util.Log
 import blackground.ekikiyen.data.Ekikime
 import retrofit2.Call
 import retrofit2.Callback
@@ -16,6 +18,10 @@ import retrofit2.http.PUT
 class HomeViewModel : ViewModel() {
 
     val ekikimeList = MutableLiveData<ArrayList<Ekikime>>()
+    val cardNumber = ObservableField<String>()
+
+    // this holds the array of strings
+    private val numberArr = ArrayList<String>()
 
     fun getAll() {
         getRetrofit()
@@ -81,6 +87,34 @@ class HomeViewModel : ViewModel() {
                 .baseUrl("https://ekikime.herokuapp.com/ekikime/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
+    }
+
+
+    // VIEW METHODS
+    fun delete() {
+        if (!numberArr.isEmpty()) {
+            numberArr.removeAt(numberArr.size -1)
+            updateCardNumber()
+        }
+    }
+
+    fun appendNumber(number: Int) {
+        numberArr.add(number.toString())
+
+        updateCardNumber()
+    }
+
+
+    fun dial() {
+
+    }
+
+    fun publish() {
+
+    }
+
+    private fun updateCardNumber() {
+        cardNumber.set(numberArr.joinToString(separator = ""))
     }
 
 

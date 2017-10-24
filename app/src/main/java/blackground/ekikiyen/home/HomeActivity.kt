@@ -69,5 +69,7 @@ class HomeActivity : AppCompatActivity() {
         val bottomSheetDialer = BottomSheetDialog(this)
         bottomSheetDialer.setContentView(dialerBinding.root)
         bottomSheetDialer.show()
+
+        dialerBinding.viewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
     }
 }
