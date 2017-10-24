@@ -2,19 +2,27 @@ package blackground.ekikiyen.home
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.support.design.widget.BottomSheetDialog
+import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import blackground.ekikiyen.R
 import blackground.ekikiyen.adapters.EkikimeAdapter
+import blackground.ekikiyen.databinding.ViewDialerBinding
 
 class HomeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+
+        findViewById<FloatingActionButton>(R.id.dial)
+                .setOnClickListener { showDialer() }
 
         val viewModel = ViewModelProviders.of(this)
                 .get(HomeViewModel::class.java)
@@ -50,5 +58,16 @@ class HomeActivity : AppCompatActivity() {
 
     private fun goToAbout() {
 
+    }
+
+    private fun showDialer() {
+        val inflater = LayoutInflater.from(this)
+
+        val dialerBinding: ViewDialerBinding =
+                DataBindingUtil.inflate(inflater, R.layout.view_dialer, null, false)
+
+        val bottomSheetDialer = BottomSheetDialog(this)
+        bottomSheetDialer.setContentView(dialerBinding.root)
+        bottomSheetDialer.show()
     }
 }
