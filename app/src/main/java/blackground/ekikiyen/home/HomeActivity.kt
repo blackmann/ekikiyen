@@ -2,7 +2,9 @@ package blackground.ekikiyen.home
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.databinding.DataBindingUtil
+import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.BottomSheetDialog
 import android.support.design.widget.FloatingActionButton
@@ -34,6 +36,9 @@ class HomeActivity : AppCompatActivity() {
         viewModel.ekikimeList
                 .observe(this, Observer { adapter.update(it) })
 
+        viewModel.dialNumber
+                .observe(this, Observer { loadCard(it) })
+
         // now let the view model fetch the items
         viewModel.getAll()
     }
@@ -50,6 +55,15 @@ class HomeActivity : AppCompatActivity() {
             R.id.about -> goToAbout()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun loadCard(card: String?) {
+        if (card == null) {
+            return
+        }
+
+        val dialIntent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:$card"))
+        startActivity(dialIntent)
     }
 
     private fun refresh() {

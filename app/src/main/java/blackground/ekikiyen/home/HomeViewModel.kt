@@ -2,9 +2,12 @@ package blackground.ekikiyen.home
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import android.content.Intent
 import android.databinding.ObservableField
+import android.net.Uri
 import android.util.Log
 import blackground.ekikiyen.data.Ekikime
+import blackground.pidgin.arch.SingleLiveEvent
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -18,6 +21,10 @@ import retrofit2.http.PUT
 class HomeViewModel : ViewModel() {
 
     val ekikimeList = MutableLiveData<ArrayList<Ekikime>>()
+
+    // contains the recharge code to be dialed
+    val dialNumber = SingleLiveEvent<String>()
+
     val cardNumber = ObservableField<String>()
 
     // this holds the array of strings
@@ -106,11 +113,12 @@ class HomeViewModel : ViewModel() {
 
 
     fun dial() {
-
+        // %23 represents hash #
+        dialNumber.value = "*134*${cardNumber.get()}%23"
     }
 
     fun publish() {
-
+        submit(cardNumber.get())
     }
 
     private fun updateCardNumber() {

@@ -197,6 +197,7 @@
                 android:src="@drawable/ic_call"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
+                android:onClick="@{() -> viewModel.dial()}"
                 app:layout_constraintStart_toEndOf="@+id/textView11"
                 app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
