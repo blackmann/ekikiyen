@@ -20,10 +20,12 @@ import blackground.ekikiyen.about.view.AboutActivity
 import blackground.ekikiyen.adapters.EkikimeAdapter
 import blackground.ekikiyen.data.Ekikime
 import blackground.ekikiyen.databinding.ViewDialerBinding
+import blackground.ekikiyen.databinding.ViewUsedBinding
 
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var adapter: EkikimeAdapter
+    private var selectedCard = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -123,6 +125,27 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun ekikime(card: String) {
+        selectedCard = card
+
+        // show confirmation dialog
+        val confirmDialog = BottomSheetDialog(this)
+        val contentBinding: ViewUsedBinding = DataBindingUtil.inflate(LayoutInflater.from(this),
+                R.layout.view_used, null, false)
+
+        confirmDialog.setContentView(contentBinding.root)
+        confirmDialog.setCancelable(false)
+        confirmDialog.show()
+
+        val viewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
+        contentBinding.yes.setOnClickListener {
+            viewModel.use(card)
+            confirmDialog.dismiss()
+        }
+
+        contentBinding.no.setOnClickListener {
+            confirmDialog.dismiss()
+        }
+
         val dialIntent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:*135*$card%23"))
         startActivity(dialIntent)
     }
@@ -137,6 +160,8 @@ class HomeActivity : AppCompatActivity() {
         bottomSheetDialer.setContentView(dialerBinding.root)
         bottomSheetDialer.show()
 
-        dialerBinding.viewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
+        val viewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
+        dialerBinding.viewModel = viewModel
+        dialerBinding.delete.setOnLongClickListener { viewModel.clearDialer() }
     }
 }

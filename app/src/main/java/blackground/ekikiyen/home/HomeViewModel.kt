@@ -49,7 +49,7 @@ class HomeViewModel : ViewModel() {
                 })
     }
 
-    fun submit(cardNumber: String) {
+    private fun submit(cardNumber: String) {
         val form = mapOf(
                 "card_number" to cardNumber
         )
@@ -63,9 +63,6 @@ class HomeViewModel : ViewModel() {
                     override fun onResponse(call: Call<Void>?, response: Response<Void>?) {
                         // todo notify the user
                         hideLoading.call()
-
-                        // refresh list to show new
-                        getAll()
                     }
 
                     override fun onFailure(call: Call<Void>?, t: Throwable?) {
@@ -127,6 +124,12 @@ class HomeViewModel : ViewModel() {
 
     fun publish() {
         submit(cardNumber.get())
+    }
+
+    fun clearDialer(): Boolean {
+        numberArr.clear()
+        updateCardNumber()
+        return true
     }
 
     private fun updateCardNumber() {
