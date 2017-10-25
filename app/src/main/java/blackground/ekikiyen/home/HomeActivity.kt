@@ -25,13 +25,15 @@ import blackground.ekikiyen.adapters.EkikimeAdapter
 import blackground.ekikiyen.data.Ekikime
 import blackground.ekikiyen.databinding.ViewDialerBinding
 import blackground.ekikiyen.databinding.ViewUsedBinding
+import java.util.*
+import kotlin.collections.HashSet
 
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var adapter: EkikimeAdapter
     private var selectedCard = ""
 
-    var publisher: View? = null
+    private var publisher: View? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -174,6 +176,20 @@ class HomeActivity : AppCompatActivity() {
     private fun ekikime(card: String) {
         selectedCard = card
 
+        // pre-process
+        val usedCardsToday = getUsedCards()
+        if (usedCardsToday.size > 1) {
+            Toast.makeText(this, "You cannot load Ekiki me twice a day. Please come back tomorrow.",
+                    Toast.LENGTH_LONG).show()
+            return
+        }
+
+        if (usedCardsToday.contains(card)) {
+            Toast.makeText(this, "You have already used this card, try another",
+                    Toast.LENGTH_LONG).show()
+            return
+        }
+
         // show confirmation dialog
         val confirmDialog = BottomSheetDialog(this)
         val contentBinding: ViewUsedBinding = DataBindingUtil.inflate(LayoutInflater.from(this),
@@ -187,6 +203,8 @@ class HomeActivity : AppCompatActivity() {
         contentBinding.yes.setOnClickListener {
             viewModel.use(card)
             confirmDialog.dismiss()
+
+            saveToPrefs(card)
         }
 
         contentBinding.no.setOnClickListener {
@@ -222,5 +240,33 @@ class HomeActivity : AppCompatActivity() {
                 "Download from here :")
         shareIntent.type = "text/plain"
         startActivity(shareIntent)
+    }
+
+    private fun saveToPrefs(card: String) {
+        val sharedPreferences = getSharedPreferences(Date().getDateString(), Context.MODE_PRIVATE)
+        val cards = sharedPreferences.getStringSet("today", HashSet<String>()) as HashSet<String>
+
+        cards.add(card)
+
+        sharedPreferences.edit()
+                .putStringSet("today", cards)
+                .apply()
+    }
+
+    private fun getUsedCards(): HashSet<String> {
+        val sharedPreferences = getSharedPreferences(Date().getDateString(), Context.MODE_PRIVATE)
+        return sharedPreferences.getStringSet("today", HashSet<String>()) as HashSet<String>
+    }
+
+    // util
+    private fun Date.getDateString(): String {
+        val calendar = Calendar.getInstance()
+        calendar.time = this
+
+        val month = calendar.get(Calendar.MONTH)
+        val year = calendar.get(Calendar.YEAR)
+        val date = calendar.get(Calendar.DAY_OF_MONTH)
+
+        return "$date-$month-$year"
     }
 }
