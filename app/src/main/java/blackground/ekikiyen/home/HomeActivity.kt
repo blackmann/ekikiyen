@@ -2,19 +2,23 @@ package blackground.ekikiyen.home
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.BottomSheetDialog
 import android.support.design.widget.FloatingActionButton
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
+import android.widget.Toast
 import blackground.ekikiyen.R
 import blackground.ekikiyen.about.view.AboutActivity
 import blackground.ekikiyen.adapters.EkikimeAdapter
@@ -26,6 +30,8 @@ class HomeActivity : AppCompatActivity() {
 
     private lateinit var adapter: EkikimeAdapter
     private var selectedCard = ""
+
+    var publisher: View? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -114,8 +120,45 @@ class HomeActivity : AppCompatActivity() {
             return
         }
 
+        if (card.length < 14) {
+            Toast.makeText(this, "Recharge code is incomplete.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        if (!publishTipShown()) {
+            Log.i("Ekiki", "Tooltip showing $publisher")
+            AlertDialog.Builder(this)
+                    .setView(R.layout.publish_dialog)
+                    .setPositiveButton("Continue to load credit") { dialog, _ ->
+                        run {
+                            dial(card)
+                            dialog.dismiss()
+                            getSharedPreferences("ek_tip", Context.MODE_PRIVATE)
+                                    .edit()
+                                    .putBoolean("ek_tip_shown", true)
+                                    .apply()
+                        }
+                    }
+                    .create()
+                    .show()
+
+        } else {
+            dial(card)
+        }
+    }
+
+    private fun dial(card: String?) {
+        if (card == null) {
+            return
+        }
+
         val dialIntent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:*134*$card%23"))
         startActivity(dialIntent)
+    }
+
+    private fun publishTipShown(): Boolean {
+        return getSharedPreferences("ek_tip", Context.MODE_PRIVATE)
+                .getBoolean("ek_tip_shown", false)
     }
 
     private fun refresh() {
@@ -167,6 +210,8 @@ class HomeActivity : AppCompatActivity() {
         val viewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
         dialerBinding.viewModel = viewModel
         dialerBinding.delete.setOnLongClickListener { viewModel.clearDialer() }
+
+        publisher = dialerBinding.publisher
     }
 
     private fun recommendApp() {

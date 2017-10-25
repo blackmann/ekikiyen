@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -27,9 +26,10 @@
                 android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_weight="1"
+                android:hint="Only code here"
                 android:gravity="center"
                 android:text="@{viewModel.cardNumber}"
-                android:textColor="@android:color/darker_gray"
+                android:textColor="@android:color/black"
                 app:autoSizeTextType="uniform" />
 
             <ImageButton
@@ -182,13 +182,13 @@
                 android:background="?selectableItemBackgroundBorderless"
                 android:onClick="@{() -> viewModel.appendNumber(0)}"
                 android:text="@string/_0"
-                app:layout_constraintEnd_toStartOf="@+id/textView12"
+                app:layout_constraintEnd_toStartOf="@+id/dialer"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/textView13"
+                app:layout_constraintStart_toEndOf="@+id/publisher"
                 app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
             <ImageButton
-                android:id="@+id/textView12"
+                android:id="@+id/dialer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
@@ -202,7 +202,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
             <ImageButton
-                android:id="@+id/textView13"
+                android:id="@+id/publisher"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
