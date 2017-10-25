@@ -9,6 +9,7 @@ import blackground.ekikiyen.data.Ekikime
 import blackground.ekikiyen.databinding.ViewEkikimeItemBinding
 import com.amulyakhare.textdrawable.TextDrawable
 import com.amulyakhare.textdrawable.util.ColorGenerator
+import org.ocpsoft.prettytime.PrettyTime
 
 class EkikimeAdapter(private val items: ArrayList<Ekikime> = ArrayList(),
                      private val onCardClick: IOnCardClick) : RecyclerView.Adapter<EkikimeAdapter.ViewHolder>() {
@@ -41,7 +42,8 @@ class EkikimeAdapter(private val items: ArrayList<Ekikime> = ArrayList(),
     class ViewHolder(val binding: ViewEkikimeItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(ekikime: Ekikime) {
             binding.ekikimeItem = ekikime
-            binding.timeAgo.setText("5 minutes ago")
+            val prettyTime = PrettyTime()
+            binding.timeAgo.text = prettyTime.format(ekikime.createdAt)
 
             val usageRemaining = 2 - ekikime.usage
 

@@ -25,6 +25,8 @@ import blackground.ekikiyen.adapters.EkikimeAdapter
 import blackground.ekikiyen.data.Ekikime
 import blackground.ekikiyen.databinding.ViewDialerBinding
 import blackground.ekikiyen.databinding.ViewUsedBinding
+import com.crashlytics.android.Crashlytics
+import io.fabric.sdk.android.Fabric
 import java.util.*
 import kotlin.collections.HashSet
 
@@ -37,6 +39,7 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Fabric.with(this, Crashlytics())
         setContentView(R.layout.activity_home)
 
         findViewById<FloatingActionButton>(R.id.dial)
