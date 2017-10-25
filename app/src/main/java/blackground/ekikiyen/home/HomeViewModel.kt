@@ -20,6 +20,7 @@ class HomeViewModel : ViewModel() {
     val ekikimeList = MutableLiveData<ArrayList<Ekikime>>()
     val showLoading = SingleLiveEvent<Void>()
     val hideLoading = SingleLiveEvent<Void>()
+    val requestRefresh = SingleLiveEvent<Void>()
 
     // contains the recharge code to be dialed
     val dialNumber = SingleLiveEvent<String>()
@@ -61,8 +62,8 @@ class HomeViewModel : ViewModel() {
                 .submit(form)
                 .enqueue(object : Callback<Void> {
                     override fun onResponse(call: Call<Void>?, response: Response<Void>?) {
-                        // todo notify the user
                         hideLoading.call()
+                        requestRefresh.call()
                     }
 
                     override fun onFailure(call: Call<Void>?, t: Throwable?) {
@@ -83,12 +84,12 @@ class HomeViewModel : ViewModel() {
                 .use(form)
                 .enqueue(object : Callback<Void> {
                     override fun onFailure(call: Call<Void>?, t: Throwable?) {
-                        // todo notify
                         hideLoading.call()
                     }
 
                     override fun onResponse(call: Call<Void>?, response: Response<Void>?) {
                         hideLoading.call()
+                        requestRefresh.call()
                     }
 
                 })

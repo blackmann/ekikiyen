@@ -57,6 +57,9 @@ class HomeActivity : AppCompatActivity() {
         viewModel.showLoading
                 .observe(this, Observer { showLoading() })
 
+        viewModel.requestRefresh
+                .observe(this, Observer { viewModel.getAll() })
+
         // now let the view model fetch the items
         viewModel.getAll()
     }
