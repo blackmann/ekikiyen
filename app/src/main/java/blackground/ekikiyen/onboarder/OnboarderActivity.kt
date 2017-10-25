@@ -17,7 +17,22 @@ class OnboarderActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_onboard)
 
-        pages.add(Page.get("Akwaaba", "Take a moment to know what Ekiki yen is", R.drawable.ekikiyen_icon, true))
+        pages.add(Page.get("Akwaaba",
+                "Ekiki Yen is about sharing Vodafone Ekiki Me recharge numbers." +
+                        " You can also load Ekiki Me for yourself. Swipe left to know how.",
+                R.drawable.ekikiyen_icon))
+
+        pages.add(Page.get("Load your credit",
+                "Rather load your credit from the app using the dialer button, without including *134*",
+                R.drawable.share_02))
+
+        pages.add(Page.get("Share",
+                "After loading the credit come back into the app and share it without redialing the code again",
+                R.drawable.share_01))
+
+        pages.add(Page.get("Load Ekiki Me",
+                "Just tap an Ekiki Me code to load it. Simple. No dialing.",
+                R.drawable.done_02, true))
 
         val pager = findViewById<ViewPager>(R.id.onboarder_pages)
 

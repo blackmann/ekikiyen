@@ -12,16 +12,23 @@
         <activity
             android:name=".home.HomeActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".splash.Splash"
+        <activity
+            android:name=".splash.Splash"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".onboarder.OnboarderActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".about.view.AboutActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".onboarder.OnboarderActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".about.view.AboutActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="00ebd7872151be8031ec5af9b6c2a33135f9a1c3" />
     </application>
 </manifest>
