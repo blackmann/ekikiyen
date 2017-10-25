@@ -96,6 +96,7 @@ class HomeActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.refresh -> refresh()
             R.id.about -> goToAbout()
+            R.id.recommend -> recommendApp()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -166,5 +167,15 @@ class HomeActivity : AppCompatActivity() {
         val viewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
         dialerBinding.viewModel = viewModel
         dialerBinding.delete.setOnLongClickListener { viewModel.clearDialer() }
+    }
+
+    private fun recommendApp() {
+        val shareIntent = Intent()
+        shareIntent.action = Intent.ACTION_SEND
+        shareIntent.putExtra(Intent.EXTRA_TEXT, "Ekiki Yen is here.\nSpend your credit on internet bundle and use Ekiki Me for " +
+                "call. Get the idea!\nFind Ekiki me codes with this app. You can also share your card after reloading. All so simple. \n" +
+                "Download from here :")
+        shareIntent.type = "text/plain"
+        startActivity(shareIntent)
     }
 }

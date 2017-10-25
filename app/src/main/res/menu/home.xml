@@ -7,8 +7,13 @@
         android:title="@string/refresh"
         app:showAsAction="always" />
 
-    <item android:id="@+id/about"
-        android:title="@string/about"
+    <item
+        android:id="@+id/about"
         android:icon="@drawable/ic_info"
-        app:showAsAction="ifRoom"/>
+        android:title="@string/about"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/recommend"
+        android:title="@string/recommend" />
 </menu>
