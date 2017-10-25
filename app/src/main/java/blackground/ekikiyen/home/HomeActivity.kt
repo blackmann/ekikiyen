@@ -243,7 +243,7 @@ class HomeActivity : AppCompatActivity() {
         shareIntent.action = Intent.ACTION_SEND
         shareIntent.putExtra(Intent.EXTRA_TEXT, "Ekiki Yen is here.\nSpend your credit on internet bundle and use Ekiki Me for " +
                 "call. Get the idea!\nFind Ekiki me codes with this app. You can also share your card after reloading. All so simple. \n" +
-                "Download from here :")
+                "Download from here :https://play.google.com/store/apps/details?id=blackground.ekikiyen")
         shareIntent.type = "text/plain"
         startActivity(shareIntent)
     }
