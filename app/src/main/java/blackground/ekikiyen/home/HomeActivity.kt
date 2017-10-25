@@ -68,6 +68,9 @@ class HomeActivity : AppCompatActivity() {
         viewModel.requestRefresh
                 .observe(this, Observer { viewModel.getAll() })
 
+        viewModel.incompleteCard
+                .observe(this, Observer { Toast.makeText(this, "Recharge code is incomplete.", Toast.LENGTH_SHORT).show() })
+
         // now let the view model fetch the items
         viewModel.getAll()
     }

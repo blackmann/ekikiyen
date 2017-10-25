@@ -21,6 +21,7 @@ class HomeViewModel : ViewModel() {
     val showLoading = SingleLiveEvent<Void>()
     val hideLoading = SingleLiveEvent<Void>()
     val requestRefresh = SingleLiveEvent<Void>()
+    val incompleteCard = SingleLiveEvent<Void>()
 
     // contains the recharge code to be dialed
     val dialNumber = SingleLiveEvent<String>()
@@ -124,6 +125,10 @@ class HomeViewModel : ViewModel() {
     }
 
     fun publish() {
+        if (cardNumber.get() == null || cardNumber.get().length < 14) {
+            incompleteCard.call()
+            return
+        }
         submit(cardNumber.get())
     }
 

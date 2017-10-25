@@ -7,6 +7,6 @@
         android:summary="@string/developers_info"
         android:title="Developer" />
     <Preference
-        android:summary="Open Source Licenses"
-        android:title="Licences" />
+        android:summary="This app was not developed or contracted by Vodafone Ghana. It was developed out of heart."
+        android:title="Disclaimer" />
 </PreferenceScreen>
