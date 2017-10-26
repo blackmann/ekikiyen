@@ -8,7 +8,8 @@
         android:icon="@drawable/ekikiyen_icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:name=".EkikiyenApplication">
         <activity
             android:name=".home.HomeActivity"
             android:screenOrientation="portrait" />
@@ -33,5 +34,20 @@
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="00ebd7872151be8031ec5af9b6c2a33135f9a1c3" />
+
+        <!-- Pusher Push notifications -->
+        <service
+            android:name="com.pusher.android.notifications.fcm.FCMMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+
+        <service
+            android:name="com.pusher.android.notifications.fcm.FCMInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
     </application>
 </manifest>
