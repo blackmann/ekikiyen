@@ -24,10 +24,10 @@
             android:orientation="horizontal">
 
             <Button
+                android:id="@+id/no"
                 style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/no"
                 android:text="@string/no" />
 
             <Button
@@ -37,6 +37,14 @@
                 android:layout_height="wrap_content"
                 android:text="@string/yes" />
         </LinearLayout>
+
+        <Button
+            style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:id="@+id/invalid_card"
+            android:text="@string/card_was_invalid" />
 
     </LinearLayout>
 </layout>

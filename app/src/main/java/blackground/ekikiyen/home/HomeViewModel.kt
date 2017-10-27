@@ -96,6 +96,27 @@ class HomeViewModel : ViewModel() {
                 })
     }
 
+    fun invalid(cardNumber: String) {
+        val form = mapOf("card_number" to cardNumber)
+
+        showLoading.call()
+
+        getRetrofit()
+                .create(Endpoint::class.java)
+                .invalid(form)
+                .enqueue(object : Callback<Void> {
+                    override fun onFailure(call: Call<Void>?, t: Throwable?) {
+                        hideLoading.call()
+                    }
+
+                    override fun onResponse(call: Call<Void>?, response: Response<Void>?) {
+                        hideLoading.call()
+                        requestRefresh.call()
+                    }
+
+                })
+    }
+
     private fun getRetrofit(): Retrofit {
 
         return Retrofit.Builder()
@@ -152,5 +173,8 @@ class HomeViewModel : ViewModel() {
 
         @PUT("use/")
         fun use(@Body form: Map<String, String>): Call<Void>
+
+        @PUT("invalid/")
+        fun invalid(@Body form: Map<String, String>): Call<Void>
     }
 }

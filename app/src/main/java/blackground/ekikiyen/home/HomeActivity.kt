@@ -217,6 +217,11 @@ class HomeActivity : AppCompatActivity() {
             confirmDialog.dismiss()
         }
 
+        contentBinding.invalidCard.setOnClickListener {
+            viewModel.invalid(card)
+            confirmDialog.dismiss()
+        }
+
         val dialIntent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:*135*$card%23"))
         startActivity(dialIntent)
     }
