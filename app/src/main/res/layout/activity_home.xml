@@ -1,56 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <FrameLayout
+        android:id="@+id/fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <include
-            android:id="@+id/loading"
-            layout="@layout/view_loading"
-            android:visibility="gone" />
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/list"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-                tools:listitem="@layout/view_ekikime_item" />
-
-            <LinearLayout
-                android:id="@+id/empty"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@android:color/white"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="@dimen/margin_16">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="72dp"
-                    android:contentDescription="@string/image"
-                    android:src="@drawable/empty" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/no_ekikime_please_refresh_later"
-                    android:textColor="@android:color/black" />
-            </LinearLayout>
-        </FrameLayout>
-
-    </LinearLayout>
+        android:layout_height="match_parent" />
 
 
     <android.support.design.widget.FloatingActionButton
@@ -60,5 +16,4 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/margin_16"
         android:src="@drawable/ic_dial" />
-
 </android.support.design.widget.CoordinatorLayout>
