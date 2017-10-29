@@ -51,7 +51,7 @@
             android:layout_marginTop="8dp"
             android:alpha="0.7"
             android:gravity="center"
-            android:textColor="@color/darker_grey"
+            android:textColor="@color/darker_gray"
             tools:text="A long description about my application." />
 
         <Button
