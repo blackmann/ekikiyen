@@ -1,6 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/card_number"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="8dp"
+        android:gravity="center"
+        android:textColor="@android:color/black"
+        app:autoSizeTextType="uniform" />
+
+    <blackground.ekikiyen.camera.CameraSourcePreview
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/preview"
+        android:layout_weight="1">
+
+        <blackground.ekikiyen.camera.GraphicOverlay
+            android:id="@+id/graphicOverlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </blackground.ekikiyen.camera.CameraSourcePreview>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/margin_16">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_call_white"
+            android:layout_centerHorizontal="true"
+            android:padding="@dimen/margin_16"
+            android:foreground="?selectableItemBackgroundBorderless"
+            android:background="@drawable/camera_shoot_button_background" />
+
+    </RelativeLayout>
 
 </LinearLayout>

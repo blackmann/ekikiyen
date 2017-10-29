@@ -60,8 +60,16 @@ class HomeActivity : AppCompatActivity() {
 
             override fun onPageSelected(position: Int) {
                 when (position) {
-                    1 -> setMainIcon()
-                    0 -> setScannerIcon()
+                    1 -> {
+                        setMainIcon()
+                        findViewById<FloatingActionButton>(R.id.dial)
+                                .show()
+                    }
+                    0 -> {
+                        setScannerIcon()
+                        findViewById<FloatingActionButton>(R.id.dial)
+                                .hide()
+                    }
                 }
 
                 getSharedPreferences("pages", Context.MODE_PRIVATE)
@@ -78,7 +86,11 @@ class HomeActivity : AppCompatActivity() {
         viewPager.setCurrentItem(lastPage, true)
 
         // icon not changing tint when the selected is the scanner
-        if (lastPage == 0) setScannerIcon()
+        if (lastPage == 0) {
+            setScannerIcon()
+            findViewById<FloatingActionButton>(R.id.dial)
+                    .hide()
+        }
 
         findViewById<FloatingActionButton>(R.id.dial)
                 .setOnClickListener { showDialer() }
