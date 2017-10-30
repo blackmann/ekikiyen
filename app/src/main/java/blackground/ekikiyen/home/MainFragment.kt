@@ -1,13 +1,16 @@
 package blackground.ekikiyen.home
 
+import android.Manifest
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.databinding.DataBindingUtil
 import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.BottomSheetDialog
+import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
@@ -35,6 +38,8 @@ class MainFragment : Fragment() {
     private lateinit var loading: LinearLayout
 
     companion object {
+        private val RC_CALL_PERM = 121
+
         fun get(): MainFragment {
             return MainFragment()
         }
@@ -81,12 +86,27 @@ class MainFragment : Fragment() {
                 .observe(this, Observer { viewModel.getAll() })
 
         viewModel.incompleteCard
-                .observe(this, Observer { Toast.makeText(activity,
-                        "Recharge code is incomplete.",
-                        Toast.LENGTH_SHORT).show() })
+                .observe(this, Observer {
+                    Toast.makeText(activity,
+                            "Recharge code is incomplete.",
+                            Toast.LENGTH_SHORT).show()
+                })
 
         // now let the view model fetch the items
         viewModel.getAll()
+
+        askCallPermission()
+    }
+
+
+    private fun askCallPermission() {
+        if (!isCallGranted()) {
+            requestPermissions(arrayOf(Manifest.permission.CALL_PHONE), RC_CALL_PERM)
+        }
+    }
+
+    private fun isCallGranted(): Boolean {
+        return ActivityCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED
     }
 
 
@@ -155,8 +175,12 @@ class MainFragment : Fragment() {
             return
         }
 
-        val dialIntent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:*134*$card%23"))
-        startActivity(dialIntent)
+        if (!isCallGranted()) {
+            startActivity(Intent(Intent.ACTION_DIAL, Uri.parse("tel:*134*$card%23")))
+        } else {
+            val dialIntent = Intent(Intent.ACTION_CALL, Uri.parse("tel:*134*$card%23"))
+            startActivity(dialIntent)
+        }
     }
 
     private fun publishTipShown(): Boolean {
@@ -207,8 +231,13 @@ class MainFragment : Fragment() {
             confirmDialog.dismiss()
         }
 
-        val dialIntent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:*135*$card%23"))
-        startActivity(dialIntent)
+        if (!isCallGranted()) {
+            val dialIntent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:*135*$card%23"))
+            startActivity(dialIntent)
+        } else {
+            val dialIntent = Intent(Intent.ACTION_CALL, Uri.parse("tel:*135*$card%23"))
+            startActivity(dialIntent)
+        }
     }
 
     private fun saveToPrefs(card: String) {

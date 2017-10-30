@@ -21,7 +21,6 @@ import blackground.ekikiyen.about.view.AboutActivity
 import blackground.ekikiyen.databinding.ViewDialerBinding
 import com.crashlytics.android.Crashlytics
 import io.fabric.sdk.android.Fabric
-import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt
 
 class HomeActivity : AppCompatActivity() {
     private var publisher: View? = null
@@ -96,7 +95,6 @@ class HomeActivity : AppCompatActivity() {
         findViewById<FloatingActionButton>(R.id.dial)
                 .setOnClickListener { showDialer() }
     }
-
 
     private fun showDialer() {
         val inflater = LayoutInflater.from(this)

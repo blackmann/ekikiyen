@@ -23,12 +23,15 @@ class OnboarderActivity : AppCompatActivity() {
                 R.drawable.ekikiyen_icon))
 
         pages.add(Page.get("Load your credit",
-                "Rather load your credit from the app using the dialer button, without including *134*",
+                "Rather load your credit from the app using the dialer button, without including *134*.",
                 R.drawable.share_02))
 
+        pages.add(Page.get("Scan Credit", "You can also choose to scan the card rather than typing. Use the icon above to access the scanner",
+                R.drawable.ekikiyen_scanner))
+
         pages.add(Page.get("Share",
-                "After loading the credit come back into the app and share it without redialing the code again",
-                R.drawable.share_01))
+                "After loading the credit come back into the app and share it without redialing the code again. Use the icon above to share.",
+                R.drawable.ekikiyen_share))
 
         pages.add(Page.get("Load Ekiki Me",
                 "Just tap an Ekiki Me code to load it. Simple. No dialing.",

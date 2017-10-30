@@ -41,8 +41,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="@string/no_ekikime_please_refresh_later"
-                android:textColor="@android:color/black" />
+                android:text="@string/no_ekikime_please_refresh_later" />
         </LinearLayout>
     </FrameLayout>
 

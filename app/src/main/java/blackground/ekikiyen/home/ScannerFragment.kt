@@ -29,7 +29,6 @@ import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.vision.text.TextBlock
 import com.google.android.gms.vision.text.TextRecognizer
-import kotlinx.android.synthetic.main.fragment_scanner.*
 import java.io.IOException
 
 
@@ -84,6 +83,11 @@ class ScannerFragment : Fragment() {
         }
 
         gestureDetector = GestureDetector(context, CaptureGestureListener())
+    }
+
+    override fun onPause() {
+        super.onPause()
+        cameraSourcePreview.stop()
     }
 
     override fun onResume() {
@@ -210,13 +214,12 @@ class ScannerFragment : Fragment() {
             dlg.show()
         }
 
-        if (cameraSource != null) {
-            try {
-                preview.start(cameraSource, graphicOverlay)
-            } catch (e: IOException) {
-                cameraSource!!.release()
-            }
+        try {
+            cameraSourcePreview.start(cameraSource, graphicOverlay)
+        } catch (e: IOException) {
+            cameraSourcePreview.release()
         }
+
     }
 
 
@@ -255,14 +258,22 @@ class ScannerFragment : Fragment() {
         }
     }
 
+    private fun isCallGranted(): Boolean {
+        return ActivityCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED
+    }
+
     private fun publishTipShown(): Boolean {
         return activity.getSharedPreferences("ek_tip_scanner", Context.MODE_PRIVATE)
                 .getBoolean("ek_tip_shown", false)
     }
 
     private fun dial(card: String) {
-        val dialIntent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:*134*$card%23"))
-        startActivity(dialIntent)
+        if (!isCallGranted()) {
+            startActivity(Intent(Intent.ACTION_DIAL, Uri.parse("tel:*134*$card%23")))
+        } else {
+            val dialIntent = Intent(Intent.ACTION_CALL, Uri.parse("tel:*134*$card%23"))
+            startActivity(dialIntent)
+        }
     }
 
     private inner class CaptureGestureListener : GestureDetector.SimpleOnGestureListener() {
