@@ -33,9 +33,12 @@ import blackground.ekikiyen.camera.GraphicOverlay;
 public class OcrDetectorProcessor implements Detector.Processor<TextBlock> {
 
     private GraphicOverlay<OcrGraphic> mGraphicOverlay;
+    private OnCardFound onCardFound;
 
-    public OcrDetectorProcessor(GraphicOverlay<OcrGraphic> ocrGraphicOverlay) {
+    public OcrDetectorProcessor(GraphicOverlay<OcrGraphic> ocrGraphicOverlay,
+                                OnCardFound onCardFound) {
         mGraphicOverlay = ocrGraphicOverlay;
+        this.onCardFound = onCardFound;
     }
 
     // TODO:  Once this implements Detector.Processor<TextBlock>, implement the abstract methods.
@@ -55,6 +58,7 @@ public class OcrDetectorProcessor implements Detector.Processor<TextBlock> {
             textBlock = textBlock.replaceAll(" ", "");
             if (Pattern.matches("\\d{12,}", textBlock)) {
                 mGraphicOverlay.add(graphic);
+                onCardFound.found(textBlock);
             }
         }
     }
@@ -62,5 +66,9 @@ public class OcrDetectorProcessor implements Detector.Processor<TextBlock> {
     @Override
     public void release() {
         mGraphicOverlay.clear();
+    }
+
+    public interface OnCardFound {
+        void found(String value);
     }
 }

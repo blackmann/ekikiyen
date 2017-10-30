@@ -37,6 +37,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_call_white"
             android:layout_centerHorizontal="true"
+            android:id="@+id/dial"
             android:padding="@dimen/margin_16"
             android:foreground="?selectableItemBackgroundBorderless"
             android:background="@drawable/camera_shoot_button_background" />

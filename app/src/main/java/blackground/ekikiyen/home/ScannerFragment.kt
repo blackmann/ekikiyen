@@ -12,6 +12,8 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
 import android.util.Log
 import android.view.*
+import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
 import blackground.ekikiyen.R
 import blackground.ekikiyen.camera.CameraSource
@@ -42,6 +44,7 @@ class ScannerFragment : Fragment() {
     private lateinit var graphicOverlay: GraphicOverlay<OcrGraphic>
     private lateinit var cameraSourcePreview: CameraSourcePreview
     private lateinit var cameraSource: CameraSource
+    private lateinit var tvCardNumber: TextView
 
     private lateinit var gestureDetector: GestureDetector
 
@@ -56,6 +59,10 @@ class ScannerFragment : Fragment() {
 
         graphicOverlay = view.findViewById(R.id.graphicOverlay)
         cameraSourcePreview = view.findViewById(R.id.preview)
+        tvCardNumber = view.findViewById(R.id.card_number)
+
+        view.findViewById<ImageButton>(R.id.dial)
+                .setOnClickListener { dial() }
 
         val autoFocus = true
         val useFlash = false
@@ -70,7 +77,6 @@ class ScannerFragment : Fragment() {
         }
 
         gestureDetector = GestureDetector(context, CaptureGestureListener())
-
     }
 
     override fun onResume() {
@@ -108,13 +114,10 @@ class ScannerFragment : Fragment() {
     @SuppressLint("InlinedApi")
     private fun createCameraSource(autoFocus: Boolean, useFlash: Boolean) {
 
-        // TODO: Create the TextRecognizer
         val textRecognizer = TextRecognizer.Builder(context).build()
 
-        // TODO: Set the TextRecognizer's Processor.
-        textRecognizer.setProcessor(OcrDetectorProcessor(graphicOverlay))
+        textRecognizer.setProcessor(OcrDetectorProcessor(graphicOverlay, OcrDetectorProcessor.OnCardFound { setCardNumber(it) }))
 
-        // TODO: Check if the TextRecognizer is operational.
         if (!textRecognizer.isOperational) {
             Log.w("Scanner", "Detector dependencies are not yet available.")
 
@@ -129,7 +132,6 @@ class ScannerFragment : Fragment() {
             }
         }
 
-        // TODO: Create the mCameraSource using the TextRecognizer.
         cameraSource = CameraSource.Builder(context, textRecognizer)
                 .setFacing(CameraSource.CAMERA_FACING_BACK)
                 .setRequestedPreviewSize(1280, 1024)
@@ -139,30 +141,21 @@ class ScannerFragment : Fragment() {
                 .build()
     }
 
-    /**
-     * onTap is called to speak the tapped TextBlock, if any, out loud.
-     *
-     * @param rawX - the raw position of the tap
-     * @param rawY - the raw position of the tap.
-     * @return true if the tap was on a TextBlock
-     */
+    private fun setCardNumber(value: String) {
+        tvCardNumber.text = value
+    }
+
     private fun onTap(rawX: Float, rawY: Float): Boolean {
         val graphic = graphicOverlay.getGraphicAtLocation(rawX, rawY)
         var text: TextBlock? = null
         if (graphic != null) {
             text = graphic.textBlock
             if (text != null && text.value != null) {
-                Log.d("Scanner", "text data is being spoken! " + text.value)
-                // TODO: Speak the string.
-                Toast.makeText(context, text.value + " CAPTURED", Toast.LENGTH_LONG).show()
                 val scannedNumber = "*134*" + text.value + "#"
-                dial(scannedNumber)
-            } else {
-                Log.d("Scanner", "text data is null")
+                tvCardNumber.text = scannedNumber
             }
-        } else {
-            Log.d("Scanner", "no text detected")
         }
+
         return text != null
     }
 
@@ -190,7 +183,7 @@ class ScannerFragment : Fragment() {
     }
 
 
-    private fun dial(code: String) {
+    private fun dial() {
 
     }
 
