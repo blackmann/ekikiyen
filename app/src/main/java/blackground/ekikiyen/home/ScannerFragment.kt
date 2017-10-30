@@ -2,14 +2,18 @@ package blackground.ekikiyen.home
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.hardware.Camera
+import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
+import android.support.v7.app.AlertDialog
 import android.util.Log
 import android.view.*
 import android.widget.ImageButton
@@ -43,7 +47,7 @@ class ScannerFragment : Fragment() {
     private lateinit var parentView: View
     private lateinit var graphicOverlay: GraphicOverlay<OcrGraphic>
     private lateinit var cameraSourcePreview: CameraSourcePreview
-    private lateinit var cameraSource: CameraSource
+    private var cameraSource: CameraSource? = null
     private lateinit var tvCardNumber: TextView
 
     private lateinit var gestureDetector: GestureDetector
@@ -61,8 +65,8 @@ class ScannerFragment : Fragment() {
         cameraSourcePreview = view.findViewById(R.id.preview)
         tvCardNumber = view.findViewById(R.id.card_number)
 
-        view.findViewById<ImageButton>(R.id.dial)
-                .setOnClickListener { dial() }
+        view.findViewById<ImageButton>(R.id.scanner_dial)
+                .setOnClickListener { loadCredit() }
 
         val autoFocus = true
         val useFlash = false
@@ -90,25 +94,42 @@ class ScannerFragment : Fragment() {
     }
 
     private fun requestCameraPermission() {
-        Log.w("Scanner", "Camera permission is not granted. Requesting permission")
-
         val permissions = arrayOf(Manifest.permission.CAMERA)
 
         if (!ActivityCompat.shouldShowRequestPermissionRationale(activity,
                 Manifest.permission.CAMERA)) {
-            ActivityCompat.requestPermissions(activity, permissions, RC_HANDLE_CAMERA_PERM)
+            requestPermissions(permissions, RC_HANDLE_CAMERA_PERM)
             return
         }
 
+        showCameraPermissionRationale(Snackbar.LENGTH_INDEFINITE)
+    }
+
+    private fun showCameraPermissionRationale(length: Int) {
+        val permissions = arrayOf(Manifest.permission.CAMERA)
+
         val listener = View.OnClickListener {
-            ActivityCompat.requestPermissions(activity, permissions,
+            requestPermissions(permissions,
                     RC_HANDLE_CAMERA_PERM)
         }
 
         Snackbar.make(parentView, R.string.permission_camera_rationale,
-                Snackbar.LENGTH_INDEFINITE)
+                length)
                 .setAction(android.R.string.ok, listener)
                 .show()
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        Log.i("ScannerFragment", "Process permission request")
+        if (requestCode == RC_HANDLE_CAMERA_PERM) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                createCameraSource(true, false)
+            } else {
+                showCameraPermissionRationale(Snackbar.LENGTH_LONG)
+            }
+        }
     }
 
     @SuppressLint("InlinedApi")
@@ -119,8 +140,6 @@ class ScannerFragment : Fragment() {
         textRecognizer.setProcessor(OcrDetectorProcessor(graphicOverlay, OcrDetectorProcessor.OnCardFound { setCardNumber(it) }))
 
         if (!textRecognizer.isOperational) {
-            Log.w("Scanner", "Detector dependencies are not yet available.")
-
             // Check for low storage.  If there is low storage, the native library will not be
             // downloaded, so detection will not become operational.
             val lowStorageFilter = IntentFilter(Intent.ACTION_DEVICE_STORAGE_LOW)
@@ -151,7 +170,7 @@ class ScannerFragment : Fragment() {
         if (graphic != null) {
             text = graphic.textBlock
             if (text != null && text.value != null) {
-                val scannedNumber = "*134*" + text.value + "#"
+                val scannedNumber = text.value
                 tvCardNumber.text = scannedNumber
             }
         }
@@ -159,11 +178,7 @@ class ScannerFragment : Fragment() {
         return text != null
     }
 
-    /**
-     * Starts or restarts the camera source, if it exists.  If the camera source doesn't exist yet
-     * (e.g., because onResume was called before the camera source was created), this will be called
-     * again when the camera source is created.
-     */
+
     @Throws(SecurityException::class)
     private fun startCameraSource() {
         // check that the device has play services available.
@@ -174,17 +189,59 @@ class ScannerFragment : Fragment() {
             dlg.show()
         }
 
-        try {
-            preview.start(cameraSource, graphicOverlay)
-        } catch (e: IOException) {
-            Log.e("Scanner", "Unable to start camera source.", e)
-            cameraSource.release()
+        if (cameraSource != null) {
+            try {
+                preview.start(cameraSource, graphicOverlay)
+            } catch (e: IOException) {
+                cameraSource!!.release()
+            }
         }
     }
 
 
-    private fun dial() {
+    private fun loadCredit() {
+        val card = tvCardNumber.text.toString()
+        if (card.length < 14) {
+            Toast.makeText(context, "The card number is incomplete. Please scan again.",
+                    Toast.LENGTH_SHORT).show()
 
+            return
+        }
+
+        val viewModel = ViewModelProviders.of(activity)
+                .get(HomeViewModel::class.java)
+
+        viewModel.cardNumber.set(card)
+
+        if (!publishTipShown()) {
+            AlertDialog.Builder(activity)
+                    .setView(R.layout.publish_dialog)
+                    .setPositiveButton("Continue to load credit") { dialog, _ ->
+                        run {
+                            dial(card)
+                            dialog.dismiss()
+                            activity.getSharedPreferences("ek_tip_scanner", Context.MODE_PRIVATE)
+                                    .edit()
+                                    .putBoolean("ek_tip_shown", true)
+                                    .apply()
+                        }
+                    }
+                    .create()
+                    .show()
+
+        } else {
+            dial(card)
+        }
+    }
+
+    private fun publishTipShown(): Boolean {
+        return activity.getSharedPreferences("ek_tip_scanner", Context.MODE_PRIVATE)
+                .getBoolean("ek_tip_shown", false)
+    }
+
+    private fun dial(card: String) {
+        val dialIntent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:*134*$card%23"))
+        startActivity(dialIntent)
     }
 
     private inner class CaptureGestureListener : GestureDetector.SimpleOnGestureListener() {
