@@ -3,7 +3,6 @@ package blackground.ekikiyen.home
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.databinding.DataBindingUtil
 import android.graphics.PorterDuff
 import android.os.Bundle
@@ -20,9 +19,9 @@ import android.view.View
 import blackground.ekikiyen.R
 import blackground.ekikiyen.about.view.AboutActivity
 import blackground.ekikiyen.databinding.ViewDialerBinding
-import blackground.ekikiyen.home.ScannerFragment.Companion.RC_HANDLE_CAMERA_PERM
 import com.crashlytics.android.Crashlytics
 import io.fabric.sdk.android.Fabric
+import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt
 
 class HomeActivity : AppCompatActivity() {
     private var publisher: View? = null
@@ -141,7 +140,7 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    private fun switchToMain() {
+    fun switchToMain() {
         viewPager.setCurrentItem(1, true)
         setMainIcon()
     }
@@ -184,17 +183,5 @@ class HomeActivity : AppCompatActivity() {
 
     private fun goToAbout() {
         startActivity(Intent(this, AboutActivity::class.java))
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == RC_HANDLE_CAMERA_PERM) {
-            super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // configure
-            } else {
-                switchToMain()
-            }
-        }
     }
 }

@@ -68,6 +68,9 @@ class ScannerFragment : Fragment() {
         view.findViewById<ImageButton>(R.id.scanner_dial)
                 .setOnClickListener { loadCredit() }
 
+        view.findViewById<ImageButton>(R.id.scanner_publish)
+                .setOnClickListener { shareCredit() }
+
         val autoFocus = true
         val useFlash = false
 
@@ -92,6 +95,24 @@ class ScannerFragment : Fragment() {
         super.onDestroy()
         cameraSourcePreview.release()
     }
+
+    private fun shareCredit() {
+        val cardNumber = tvCardNumber.text.toString()
+
+        if (cardNumber.length < 14) {
+            Toast.makeText(context, "The card number is not complete. Please scan again.",
+                    Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        (activity as HomeActivity).switchToMain()
+        val viewModel = ViewModelProviders.of(activity)
+                .get(HomeViewModel::class.java)
+
+        viewModel.cardNumber.set(cardNumber)
+        viewModel.publish()
+    }
+
 
     private fun requestCameraPermission() {
         val permissions = arrayOf(Manifest.permission.CAMERA)

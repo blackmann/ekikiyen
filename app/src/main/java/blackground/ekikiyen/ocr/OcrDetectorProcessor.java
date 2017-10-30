@@ -56,7 +56,7 @@ public class OcrDetectorProcessor implements Detector.Processor<TextBlock> {
             String textBlock = graphic.getTextBlock().getValue();
             // remove all spaces and check if they contain only numbers
             textBlock = textBlock.replaceAll(" ", "");
-            if (Pattern.matches("\\d{14,}", textBlock)) {
+            if (Pattern.matches("\\d{13,}", textBlock)) {
                 mGraphicOverlay.add(graphic);
                 onCardFound.found(textBlock);
             }

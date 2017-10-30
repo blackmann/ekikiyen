@@ -15,9 +15,9 @@
         app:autoSizeTextType="uniform" />
 
     <blackground.ekikiyen.camera.CameraSourcePreview
+        android:id="@+id/preview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:id="@+id/preview"
         android:layout_weight="1">
 
         <blackground.ekikiyen.camera.GraphicOverlay
@@ -33,14 +33,26 @@
         android:padding="@dimen/margin_16">
 
         <ImageButton
+            android:id="@+id/scanner_dial"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_call_white"
             android:layout_centerHorizontal="true"
-            android:id="@+id/scanner_dial"
-            android:padding="@dimen/margin_16"
+            android:background="@drawable/camera_shoot_button_background"
             android:foreground="?selectableItemBackgroundBorderless"
-            android:background="@drawable/camera_shoot_button_background" />
+            android:padding="@dimen/margin_16"
+            android:src="@drawable/ic_call_white" />
+
+        <ImageButton
+            android:id="@+id/scanner_publish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/scanner_dial"
+            android:background="?selectableItemBackgroundBorderless"
+            android:contentDescription="@string/image"
+            android:padding="@dimen/margin_16"
+            android:src="@drawable/ic_publish"
+            android:textSize="12sp" />
 
     </RelativeLayout>
 
