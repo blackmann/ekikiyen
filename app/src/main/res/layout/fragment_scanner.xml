@@ -6,6 +6,14 @@
     android:orientation="vertical">
 
     <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/margin_16"
+        android:paddingRight="@dimen/margin_16"
+        android:layout_marginTop="@dimen/margin_16"
+        android:text="@string/scanned_digits_appear_here" />
+
+    <TextView
         android:id="@+id/card_number"
         android:layout_width="match_parent"
         android:layout_height="40dp"
@@ -53,6 +61,14 @@
             android:padding="@dimen/margin_16"
             android:src="@drawable/ic_publish"
             android:textSize="12sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/scanner_dial"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8dp"
+            android:text="@string/tap_to_load_credit" />
 
     </RelativeLayout>
 
