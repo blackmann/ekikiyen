@@ -16,8 +16,8 @@ android {
         applicationId "blackground.ekikiyen"
         minSdkVersion 14
         targetSdkVersion 26
-        versionCode 6
-        versionName "ALPHA-17.10.30"
+        versionCode 7
+        versionName "ALPHA-17.10.30b"
     }
     buildTypes {
         release {

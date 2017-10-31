@@ -1,6 +1,8 @@
 package blackground.ekikiyen.onboarder
 
+import android.Manifest
 import android.os.Bundle
+import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.view.ViewPager
@@ -52,6 +54,8 @@ class OnboarderActivity : AppCompatActivity() {
 
         findViewById<CircleIndicator>(R.id.indicator)
                 .setViewPager(pager)
+
+        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA, Manifest.permission.CALL_PHONE), 12)
     }
 
 

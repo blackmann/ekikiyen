@@ -20,7 +20,7 @@ class Splash : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
-        Handler().postDelayed({ startMain() }, 1350)
+        Handler().postDelayed({ startMain() }, 1000)
     }
 
     private fun startMain() {
