@@ -39,9 +39,9 @@ class EkikimeAdapter(private val items: ArrayList<Ekikime> = ArrayList(),
     }
 
 
-    class ViewHolder(val binding: ViewEkikimeItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    class ViewHolder(private val binding: ViewEkikimeItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(ekikime: Ekikime) {
-            binding.ekikimeItem = ekikime
+            binding.cardNumber.text = ekikime.cardNumber.replaceRange(6, 12, "-----")
             val prettyTime = PrettyTime()
             binding.timeAgo.text = prettyTime.format(ekikime.createdAt)
 
