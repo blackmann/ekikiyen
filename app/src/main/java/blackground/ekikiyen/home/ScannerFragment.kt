@@ -23,6 +23,7 @@ import blackground.ekikiyen.R
 import blackground.ekikiyen.camera.CameraSource
 import blackground.ekikiyen.camera.CameraSourcePreview
 import blackground.ekikiyen.camera.GraphicOverlay
+import blackground.ekikiyen.customviews.ScannerOverlay
 import blackground.ekikiyen.ocr.OcrDetectorProcessor
 import blackground.ekikiyen.ocr.OcrGraphic
 import com.google.android.gms.common.ConnectionResult
@@ -48,6 +49,7 @@ class ScannerFragment : Fragment() {
     private lateinit var cameraSourcePreview: CameraSourcePreview
     private var cameraSource: CameraSource? = null
     private lateinit var tvCardNumber: TextView
+    private lateinit var scannerOverlay: ScannerOverlay
 
     private lateinit var gestureDetector: GestureDetector
 

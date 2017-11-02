@@ -8,9 +8,9 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_16"
         android:paddingLeft="@dimen/margin_16"
         android:paddingRight="@dimen/margin_16"
-        android:layout_marginTop="@dimen/margin_16"
         android:text="@string/scanned_digits_appear_here" />
 
     <TextView
@@ -22,18 +22,29 @@
         android:textColor="@android:color/black"
         app:autoSizeTextType="uniform" />
 
-    <blackground.ekikiyen.camera.CameraSourcePreview
-        android:id="@+id/preview"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <blackground.ekikiyen.camera.GraphicOverlay
-            android:id="@+id/graphicOverlay"
+        <blackground.ekikiyen.camera.CameraSourcePreview
+            android:id="@+id/preview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent">
 
-    </blackground.ekikiyen.camera.CameraSourcePreview>
+            <blackground.ekikiyen.camera.GraphicOverlay
+                android:id="@+id/graphicOverlay"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </blackground.ekikiyen.camera.CameraSourcePreview>
+
+        <blackground.ekikiyen.customviews.ScannerOverlay
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/scanner_overlay"/>
+    </FrameLayout>
+
 
     <RelativeLayout
         android:layout_width="match_parent"
