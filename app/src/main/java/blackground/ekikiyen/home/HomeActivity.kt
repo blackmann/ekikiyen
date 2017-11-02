@@ -188,7 +188,7 @@ class HomeActivity : AppCompatActivity() {
     private fun refresh() {
         ViewModelProviders.of(this)
                 .get(HomeViewModel::class.java)
-                .getAll()
+                .requestRefresh.call()
     }
 
     private fun goToAbout() {

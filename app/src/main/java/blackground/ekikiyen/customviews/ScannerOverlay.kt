@@ -33,7 +33,7 @@ class ScannerOverlay : View {
         valueAnimator = ValueAnimator.ofFloat(0f, width.toFloat())
         valueAnimator?.repeatCount = ValueAnimator.INFINITE
         valueAnimator?.repeatMode = ValueAnimator.REVERSE
-        valueAnimator?.duration = 1500L
+        valueAnimator?.duration = 2000L
         valueAnimator?.interpolator = LinearInterpolator()
 
         valueAnimator?.addUpdateListener {

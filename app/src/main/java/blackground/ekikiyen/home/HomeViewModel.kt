@@ -23,6 +23,7 @@ class HomeViewModel : ViewModel() {
     val requestRefresh = SingleLiveEvent<Void>()
     val incompleteCard = SingleLiveEvent<Void>()
     val processInfo = MutableLiveData<String>()
+    val saveShared = SingleLiveEvent<String>()
 
     // contains the recharge code to be dialed
     val dialNumber = SingleLiveEvent<String>()
@@ -68,9 +69,13 @@ class HomeViewModel : ViewModel() {
                 .create(Endpoint::class.java)
                 .submit(form)
                 .enqueue(object : Callback<Void> {
-                    override fun onResponse(call: Call<Void>?, response: Response<Void>?) {
+                    override fun onResponse(call: Call<Void>?, response: Response<Void>) {
                         hideLoading.call()
-                        requestRefresh.call()
+
+                        if (response.isSuccessful) {
+                            saveShared.value = cardNumber
+                            requestRefresh.call()
+                        }
                     }
 
                     override fun onFailure(call: Call<Void>?, t: Throwable?) {

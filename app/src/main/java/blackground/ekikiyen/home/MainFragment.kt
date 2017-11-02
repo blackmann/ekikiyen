@@ -15,6 +15,7 @@ import android.support.v4.app.Fragment
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,6 +27,8 @@ import blackground.ekikiyen.adapters.EkikimeAdapter
 import blackground.ekikiyen.data.Ekikime
 import blackground.ekikiyen.databinding.ViewUsedBinding
 import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashSet
 
 class MainFragment : Fragment() {
 
@@ -84,7 +87,16 @@ class MainFragment : Fragment() {
                 .observe(this, Observer { showLoading() })
 
         viewModel.requestRefresh
-                .observe(this, Observer { viewModel.getAll() })
+                .observe(this, Observer {
+                    if (shouldLoadEkikime()) {
+                        viewModel.getAll()
+                    } else {
+                        viewModel.ekikimeList.value = ArrayList()
+                        Toast.makeText(activity, "Sorry, you have to start sharing in order to start seeing ekiki me codes. Ki'king is caring...",
+                                Toast.LENGTH_LONG)
+                                .show()
+                    }
+                })
 
         viewModel.incompleteCard
                 .observe(this, Observer {
@@ -99,10 +111,41 @@ class MainFragment : Fragment() {
                             .text = it
                 })
 
+        viewModel.saveShared.observe(this, Observer {
+            saveSharedCard(it)
+        })
+
         // now let the view model fetch the items
-        viewModel.getAll()
+        viewModel.requestRefresh.call()
 
         askCallPermission()
+    }
+
+    private fun saveSharedCard(cardNumber: String?) {
+        if (cardNumber == null) return
+
+        val sharedCardPrefs = activity.getSharedPreferences("statistics", Context.MODE_PRIVATE)
+        val shared = sharedCardPrefs.getStringSet("shared", setOf("0", "1")) as HashSet<String>
+
+        shared.add(cardNumber)
+        sharedCardPrefs.edit()
+                .putStringSet("shared", shared)
+                .apply()
+    }
+
+
+    private fun getSharedCards(): MutableSet<String> {
+        val sharedCardPrefs = activity.getSharedPreferences("statistics", Context.MODE_PRIVATE)
+
+        // the reason for the default set of two items is to allow first two tries of loading
+        return sharedCardPrefs.getStringSet("shared", setOf("0", "1"))
+    }
+
+    private fun shouldLoadEkikime(): Boolean {
+        val shared = getSharedCards()
+        val used = getUsedCards()
+
+        return (shared.size - used.size) > 0
     }
 
 
@@ -151,7 +194,7 @@ class MainFragment : Fragment() {
             return
         }
 
-        if (card.length < 14) {
+        if (card.length < 13) {
             Toast.makeText(activity, "Recharge code is incomplete.", Toast.LENGTH_SHORT).show()
             return
         }
@@ -200,13 +243,15 @@ class MainFragment : Fragment() {
 
         // pre-process
         val usedCardsToday = getUsedCards()
-        if (usedCardsToday.size > 1) {
+
+        // restriction on twice a day is taken off
+        /*if (usedCardsToday.size > 1) {
             Toast.makeText(context, "You cannot load Ekiki me twice a day. Please come back tomorrow.",
                     Toast.LENGTH_LONG).show()
             return
-        }
+        }*/
 
-        if (usedCardsToday.contains(card)) {
+        if (usedCardsToday.contains(card) or getSharedCards().contains(card)) {
             Toast.makeText(context, "You have already used this card, try another",
                     Toast.LENGTH_LONG).show()
             return
@@ -247,20 +292,21 @@ class MainFragment : Fragment() {
         }
     }
 
+    // saves cards used today
     private fun saveToPrefs(card: String) {
-        val sharedPreferences = activity.getSharedPreferences(Date().getDateString(), Context.MODE_PRIVATE)
-        val cards = sharedPreferences.getStringSet("today", HashSet<String>()) as HashSet<String>
+        val sharedPreferences = activity.getSharedPreferences("statistics", Context.MODE_PRIVATE)
+        val cards = sharedPreferences.getStringSet("used", HashSet<String>()) as HashSet<String>
 
         cards.add(card)
 
         sharedPreferences.edit()
-                .putStringSet("today", cards)
+                .putStringSet("used", cards)
                 .apply()
     }
 
     private fun getUsedCards(): HashSet<String> {
-        val sharedPreferences = activity.getSharedPreferences(Date().getDateString(), Context.MODE_PRIVATE)
-        return sharedPreferences.getStringSet("today", HashSet<String>()) as HashSet<String>
+        val sharedPreferences = activity.getSharedPreferences("statistics", Context.MODE_PRIVATE)
+        return sharedPreferences.getStringSet("used", HashSet<String>()) as HashSet<String>
     }
 
     // util
