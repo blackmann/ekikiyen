@@ -22,6 +22,7 @@ class HomeViewModel : ViewModel() {
     val hideLoading = SingleLiveEvent<Void>()
     val requestRefresh = SingleLiveEvent<Void>()
     val incompleteCard = SingleLiveEvent<Void>()
+    val processInfo = MutableLiveData<String>()
 
     // contains the recharge code to be dialed
     val dialNumber = SingleLiveEvent<String>()
@@ -31,8 +32,13 @@ class HomeViewModel : ViewModel() {
     // this holds the array of strings
     private val numberArr = ArrayList<String>()
 
-    fun getAll() {
+    private fun inform(message: String) {
+        processInfo.value = message
         showLoading.call()
+    }
+
+    fun getAll() {
+        inform("Fetching shared cards...")
 
         getRetrofit()
                 .create(Endpoint::class.java)
@@ -56,7 +62,7 @@ class HomeViewModel : ViewModel() {
                 "card_number" to cardNumber
         )
 
-        showLoading.call()
+        inform("Submitting your card...")
 
         getRetrofit()
                 .create(Endpoint::class.java)
@@ -78,7 +84,7 @@ class HomeViewModel : ViewModel() {
     fun use(cardNumber: String) {
         val form = mapOf("card_number" to cardNumber)
 
-        showLoading.call()
+        inform("Updating...")
 
         getRetrofit()
                 .create(Endpoint::class.java)
@@ -99,7 +105,7 @@ class HomeViewModel : ViewModel() {
     fun invalid(cardNumber: String) {
         val form = mapOf("card_number" to cardNumber)
 
-        showLoading.call()
+        inform("Updating...")
 
         getRetrofit()
                 .create(Endpoint::class.java)

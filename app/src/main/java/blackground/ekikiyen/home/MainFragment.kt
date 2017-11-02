@@ -19,6 +19,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import blackground.ekikiyen.R
 import blackground.ekikiyen.adapters.EkikimeAdapter
@@ -90,6 +91,12 @@ class MainFragment : Fragment() {
                     Toast.makeText(activity,
                             "Recharge code is incomplete.",
                             Toast.LENGTH_SHORT).show()
+                })
+
+        viewModel.processInfo
+                .observe(this, Observer {
+                    loading.findViewById<TextView>(R.id.process_info)
+                            .text = it
                 })
 
         // now let the view model fetch the items

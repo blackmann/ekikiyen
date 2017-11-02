@@ -26,6 +26,12 @@ class HomeActivity : AppCompatActivity() {
     private var publisher: View? = null
     private lateinit var viewPager: ViewPager
 
+    // this variable is used to reference the current
+    // page being viewed.
+    // 0 - Scanner
+    // 1 - Main
+    private var lastPage: Int = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Fabric.with(this, Crashlytics())
@@ -72,15 +78,18 @@ class HomeActivity : AppCompatActivity() {
                     }
                 }
 
+                lastPage = position
                 getSharedPreferences("pages", Context.MODE_PRIVATE)
                         .edit()
-                        .putInt("selected_page", position)
+                        .putInt("selected_page", lastPage)
                         .apply()
+
+                invalidateOptionsMenu()
             }
 
         })
 
-        val lastPage = getSharedPreferences("pages", Context.MODE_PRIVATE)
+        lastPage = getSharedPreferences("pages", Context.MODE_PRIVATE)
                 .getInt("selected_page", 1)
 
         viewPager.setCurrentItem(lastPage, true)
@@ -114,7 +123,8 @@ class HomeActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater?.inflate(R.menu.home, menu)
+        val menuRes = if (lastPage == 1) R.menu.home else R.menu.menu_home_scan
+        menuInflater?.inflate(menuRes, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -153,6 +163,8 @@ class HomeActivity : AppCompatActivity() {
         val scannerIcon = resources.getDrawable(R.drawable.ic_scan)
         scannerIcon.setColorFilter(resources.getColor(R.color.darker_gray), PorterDuff.Mode.SRC_ATOP)
         supportActionBar?.setHomeAsUpIndicator(scannerIcon)
+
+
     }
 
     @Suppress("DEPRECATION")
