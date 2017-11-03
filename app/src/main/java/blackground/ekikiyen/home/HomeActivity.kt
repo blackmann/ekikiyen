@@ -68,13 +68,9 @@ class HomeActivity : AppCompatActivity() {
                 when (position) {
                     1 -> {
                         setMainIcon()
-                        findViewById<FloatingActionButton>(R.id.dial)
-                                .show()
                     }
                     0 -> {
                         setScannerIcon()
-                        findViewById<FloatingActionButton>(R.id.dial)
-                                .hide()
                     }
                 }
 
@@ -97,8 +93,6 @@ class HomeActivity : AppCompatActivity() {
         // icon not changing tint when the selected is the scanner
         if (lastPage == 0) {
             setScannerIcon()
-            findViewById<FloatingActionButton>(R.id.dial)
-                    .hide()
         }
 
         findViewById<FloatingActionButton>(R.id.dial)
