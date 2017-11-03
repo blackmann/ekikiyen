@@ -158,7 +158,7 @@ class HomeViewModel : ViewModel() {
     }
 
     fun publish() {
-        if (cardNumber.get() == null || cardNumber.get().length < 14) {
+        if (cardNumber.get() == null || cardNumber.get().length < 13) {
             incompleteCard.call()
             return
         }
