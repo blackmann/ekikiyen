@@ -24,6 +24,7 @@ class HomeViewModel : ViewModel() {
     val incompleteCard = SingleLiveEvent<Void>()
     val processInfo = MutableLiveData<String>()
     val saveShared = SingleLiveEvent<String>()
+    val switchToMain = SingleLiveEvent<Void>()
 
     // contains the recharge code to be dialed
     val dialNumber = SingleLiveEvent<String>()
@@ -161,6 +162,7 @@ class HomeViewModel : ViewModel() {
             incompleteCard.call()
             return
         }
+        switchToMain.call()
         submit(cardNumber.get())
     }
 

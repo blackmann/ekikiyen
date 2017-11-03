@@ -1,5 +1,6 @@
 package blackground.ekikiyen.home
 
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
@@ -68,9 +69,13 @@ class HomeActivity : AppCompatActivity() {
                 when (position) {
                     1 -> {
                         setMainIcon()
+                        findViewById<FloatingActionButton>(R.id.dial)
+                                .hide()
                     }
                     0 -> {
                         setScannerIcon()
+                        findViewById<FloatingActionButton>(R.id.dial)
+                                .show()
                     }
                 }
 
@@ -93,7 +98,13 @@ class HomeActivity : AppCompatActivity() {
         // icon not changing tint when the selected is the scanner
         if (lastPage == 0) {
             setScannerIcon()
+            findViewById<FloatingActionButton>(R.id.dial)
+                    .show()
         }
+
+        ViewModelProviders.of(this)
+                .get(HomeViewModel::class.java)
+                .switchToMain.observe(this, Observer { switchToMain() })
 
         findViewById<FloatingActionButton>(R.id.dial)
                 .setOnClickListener { showDialer() }
