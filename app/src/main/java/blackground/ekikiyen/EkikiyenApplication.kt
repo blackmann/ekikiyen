@@ -42,7 +42,7 @@ class EkikiyenApplication : Application() {
 
         if (cardsLoadedToday.size < 2) {
             if (remoteMessage.notification == null) return
-            createNotification(remoteMessage.notification.title, remoteMessage.notification.body)
+            createNotification(remoteMessage.notification?.title, remoteMessage.notification?.body)
         }
     }
 

@@ -53,6 +53,13 @@ class EkikimeAdapter(private val items: ArrayList<Ekikime> = ArrayList(),
                     .buildRound(usageRemaining.toString(), colorGenerator.randomColor)
 
             binding.usageRemaining.setImageDrawable(textDrawable)
+            if (usageRemaining == 0) {
+                binding.root?.isEnabled = false
+                binding.root?.alpha = 0.4f
+            } else {
+                binding.root?.isEnabled = true
+                binding.root?.alpha = 1.0f
+            }
         }
     }
 
